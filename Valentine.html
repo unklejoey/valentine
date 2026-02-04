@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Be My Valentine ❤️</title>
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 60px 20px;
+      color: #b3003c;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      animation: fadeIn 1s ease;
+    }
+
+    .hidden { display: none; }
+
+    button {
+      padding: 12px 25px;
+      font-size: 18px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin: 10px;
+      transition: 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    #yes { background: #ff4d6d; color: white; }
+    #no { background: #888; color: white; position: relative; }
+
+    .option-btn { background: white; color: #b3003c; }
+
+    .final {
+      font-size: 24px;
+      margin-top: 20px;
+      font-weight: bold;
+      animation: pop 0.8s ease;
+    }
+
+    /* Dancing bear */
+    .bear {
+      font-size: 80px;
+      margin-top: 20px;
+      animation: dance 1s infinite alternate ease-in-out;
+    }
+
+    @keyframes dance {
+      0% { transform: rotate(-10deg) scale(1); }
+      100% { transform: rotate(10deg) scale(1.1); }
+    }
+
+    /* Falling hearts */
+    .heart {
+      position: fixed;
+      top: -10px;
+      font-size: 20px;
+      animation: fall linear forwards;
+      pointer-events: none;
+    }
+
+    @keyframes fall {
+      to { transform: translateY(110vh); opacity: 0; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- STEP 1 -->
+  <div id="step1">
+    <h1 id="question">Will you be my Valentine? ❤️</h1>
+    <button id="yes">Yes</button>
+    <button id="no">No</button>
+  </div>
+
+  <!-- STEP 2 -->
+  <div id="step2" class="hidden">
+    <h1>Yaaay! 🥰 What do you want for Valentine?</h1>
+
+    <button class="option-btn" onclick="chooseGift('Flowers 🌹')">Flowers 🌹</button>
+    <button class="option-btn" onclick="chooseGift('Chocolate 🍫')">Chocolate 🍫</button>
+    <button class="option-btn" onclick="chooseGift('Dinner Date 🍽️')">Dinner Date 🍽️</button>
+    <button class="option-btn" onclick="chooseGift('Everything 😍')">Everything 😍</button>
+  </div>
+
+  <!-- STEP 3 -->
+  <div id="step3" class="hidden">
+    <h1>Nice choice 😏 Now… what will you give me? ❤️</h1>
+
+    <button class="option-btn" onclick="finalMessage('Doggy 😘')">Doggy 😘</button>
+    <button class="option-btn" onclick="finalMessage('Snake in the Monkey Shadow ❤️')">Snake in the Monkey Shadow ❤️</button>
+    <button class="option-btn" onclick="finalMessage('Missionary 🤗')">Missionary 🤗</button>
+    <button class="option-btn" onclick="finalMessage('All of the above 💖')">All of the above 💖</button>
+  </div>
+
+  <!-- FINAL -->
+  <div id="final" class="hidden">
+    <h1 class="final" id="finalText"></h1>
+    <div class="bear">🐻‍❄️💃</div>
+  </div>
+
+  <script>
+    const yesBtn = document.getElementById("yes");
+    const noBtn = document.getElementById("no");
+
+    let size = 18;
+
+    function createHearts() {
+      for (let i = 0; i < 40; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "❤️";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = (2 + Math.random() * 3) + "s";
+        heart.style.fontSize = (16 + Math.random() * 24) + "px";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+      }
+    }
+
+    noBtn.addEventListener("click", () => {
+      size += 12;
+      yesBtn.style.fontSize = size + "px";
+      yesBtn.style.padding = size/2 + "px " + size + "px";
+    });
+
+    yesBtn.addEventListener("click", () => {
+      createHearts();
+      document.getElementById("step1").classList.add("hidden");
+      document.getElementById("step2").classList.remove("hidden");
+    });
+
+    function chooseGift(gift) {
+      document.getElementById("step2").classList.add("hidden");
+      document.getElementById("step3").classList.remove("hidden");
+    }
+
+    function finalMessage(answer) {
+      document.getElementById("step3").classList.add("hidden");
+      const final = document.getElementById("final");
+      const text = document.getElementById("finalText");
+
+      createHearts();
+
+      text.innerHTML = `Haha 🥹 You chose <br><br> <strong>${answer}</strong> <br><br> It's going to be fun! ❤️`;
+
+      final.classList.remove("hidden");
+    }
+  </script>
+
+</body>
+</html>
