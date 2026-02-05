@@ -197,14 +197,21 @@
       // Google Form POST endpoint
       const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSdDEoGfM4ksj1dE4C0eYp1ZRwmJzH6tO9ND54zC52QigCtekw/formResponse";
 
-      // Build FormData with the 3 fields
-      const formData = new FormData();
-      formData.append("entry.373337828", nicknameValue);   // Nickname
-      formData.append("entry.661368496", giftValue);       // Valentine gift
-      formData.append("entry.1990425933", answerValue);    // What they give you
+      // URL-encode the data
+      const data = new URLSearchParams();
+      data.append("entry.373337828", nicknameValue);   // Nickname
+      data.append("entry.661368496", giftValue);       // Valentine gift
+      data.append("entry.1990425933", answerValue);    // What they give you
 
-      // Submit without redirect
-      fetch(formURL, { method: "POST", body: formData, mode: "no-cors" });
+      // Send POST request
+      fetch(formURL, {
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        mode: "no-cors"
+      });
 
       // Show final screen
       document.getElementById("step3").classList.add("hidden");
