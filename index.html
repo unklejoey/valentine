@@ -146,6 +146,8 @@
     let answerValue = "";
     let size = 18;
 
+    const webAppURL = "https://script.google.com/macros/s/AKfycbzGUeC9dceEDSseVuduDihW7okB6halJGQADUhm4ZCWK3F9v3SyKLM6A04QbcR6HTkH/exec";
+
     // Falling hearts function
     function createHearts() {
       for (let i = 0; i < 40; i++) {
@@ -190,28 +192,20 @@
       document.getElementById("step3").classList.remove("hidden");
     }
 
-    // Step 3: Final message and submit to Google Form
+    // Step 3: Final message and submit to Google Apps Script
     function finalMessage(answer) {
       answerValue = answer;
 
-      // Google Form POST endpoint
-      const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSdDEoGfM4ksj1dE4C0eYp1ZRwmJzH6tO9ND54zC52QigCtekw/formResponse";
-
-      // URL-encode the data
-      const data = new URLSearchParams();
-      data.append("entry.373337828", nicknameValue);   // Nickname
-      data.append("entry.661368496", giftValue);       // Valentine gift
-      data.append("entry.1990425933", answerValue);    // What they give you
-
-      // Send POST request
-      fetch(formURL, {
+      // Send POST request to Web App
+      fetch(webAppURL, {
         method: "POST",
-        body: data,
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        mode: "no-cors"
-      });
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nickname: nicknameValue,
+          gift: giftValue,
+          answer: answerValue
+        })
+      }).catch((err) => console.log("Submission error:", err));
 
       // Show final screen
       document.getElementById("step3").classList.add("hidden");
