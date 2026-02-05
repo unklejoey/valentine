@@ -60,7 +60,7 @@
   <h1>Yaaay! 🥰 What do you want for Valentine?</h1>
   <button class="option-btn" onclick="chooseGift('Flowers 🌹')">Flowers 🌹</button>
   <button class="option-btn" onclick="chooseGift('Chocolate 🍫')">Chocolate 🍫</button>
-  <button class="option-btn" onclick="chooseGift('Dinner Date 🍽️')">Dinner Date 🍽️</button>
+  <button class="option-btn" onclick="chooseGift('Package from Sellys')">Package from Sellys</button>
   <button class="option-btn" onclick="chooseGift('Everything 😍')">Everything 😍</button>
 </div>
 
@@ -79,10 +79,17 @@
   <div class="bear">🐻‍❄️💃</div>
 </div>
 
+<!-- HIDDEN FORM FOR GOOGLE FORMS -->
+<form id="hiddenForm" action="https://docs.google.com/forms/d/e/1FAIpQLSdDEoGfM4ksj1dE4C0eYp1ZRwmJzH6tO9ND54zC52QigCtekw/formResponse" method="POST" target="hidden_iframe">
+  <input name="entry.373337828" id="formNickname">
+  <input name="entry.661368496" id="formGift">
+  <input name="entry.1990425933" id="formAnswer">
+</form>
+<iframe name="hidden_iframe" style="display:none;"></iframe>
+
 <script>
 let nickname = "";
 let selectedGift = "";
-
 const yesBtn = document.getElementById("yes");
 const noBtn = document.getElementById("no");
 let size = 18;
@@ -137,23 +144,12 @@ function finalMessage(answer) {
 
   final.classList.remove("hidden");
 
-  // Submit to Google Forms
-  submitToGoogleForm(nickname, selectedGift, answer);
-}
-
-function submitToGoogleForm(nickname, gift, answer) {
-  const url = "https://docs.google.com/forms/d/e/1FAIpQLSdDEoGfM4ksj1dE4C0eYp1ZRwmJzH6tO9ND54zC52QigCtekw/formResponse";
-  
-  const data = new FormData();
-   data.append("entry.373337828", nickname);   // Nickname field
-  data.append("entry.661368496", gift);       // Gift chosen field
-  data.append("entry.1990425933", answer);    // Return gift field  
-
-  fetch(url, { method: "POST", body: data })
-    .then(() => console.log("Response submitted"))
-    .catch(err => console.error(err));
+  // SUBMIT TO GOOGLE FORM VIA HIDDEN FORM
+  document.getElementById('formNickname').value = nickname;
+  document.getElementById('formGift').value = selectedGift;
+  document.getElementById('formAnswer').value = answer;
+  document.getElementById('hiddenForm').submit();
 }
 </script>
 </body>
 </html>
-
