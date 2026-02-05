@@ -20,17 +20,6 @@
       animation: fadeIn 1s ease;
     }
 
-    input {
-      padding: 12px 15px;
-      font-size: 18px;
-      border-radius: 10px;
-      border: 2px solid #b3003c;
-      margin-bottom: 20px;
-      width: 80%;
-      max-width: 300px;
-      text-align: center;
-    }
-
     .hidden { display: none; }
 
     button {
@@ -44,7 +33,6 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
 
-    #startBtn { background: #ff4d6d; color: white; }
     #yes { background: #ff4d6d; color: white; }
     #no { background: #888; color: white; position: relative; }
 
@@ -96,15 +84,8 @@
 
 <body>
 
-  <!-- STEP 0: Nickname -->
-  <div id="step0">
-    <h1>Enter your nickname 📝</h1>
-    <input type="text" id="nickname" placeholder="Your nickname" />
-    <button id="startBtn">Start ❤️</button>
-  </div>
-
   <!-- STEP 1 -->
-  <div id="step1" class="hidden">
+  <div id="step1">
     <h1 id="question">Will you be my Valentine? ❤️</h1>
     <button id="yes">Yes</button>
     <button id="no">No</button>
@@ -137,16 +118,11 @@
   </div>
 
   <script>
-    const startBtn = document.getElementById("startBtn");
     const yesBtn = document.getElementById("yes");
     const noBtn = document.getElementById("no");
 
-    let nicknameValue = "";
-    let giftValue = "";
-    let answerValue = "";
     let size = 18;
 
-    // Falling hearts function
     function createHearts() {
       for (let i = 0; i < 40; i++) {
         const heart = document.createElement("div");
@@ -160,53 +136,24 @@
       }
     }
 
-    // Step 0: Enter nickname
-    startBtn.addEventListener("click", () => {
-      const nick = document.getElementById("nickname").value.trim();
-      if (!nick) { alert("Please enter a nickname! 😄"); return; }
-      nicknameValue = nick;
-      document.getElementById("step0").classList.add("hidden");
-      document.getElementById("step1").classList.remove("hidden");
-    });
-
-    // No button moves Yes button away
     noBtn.addEventListener("click", () => {
       size += 12;
       yesBtn.style.fontSize = size + "px";
       yesBtn.style.padding = size/2 + "px " + size + "px";
     });
 
-    // Yes button moves to Step 2
     yesBtn.addEventListener("click", () => {
       createHearts();
       document.getElementById("step1").classList.add("hidden");
       document.getElementById("step2").classList.remove("hidden");
     });
 
-    // Step 2: Choose gift
     function chooseGift(gift) {
-      giftValue = gift;
       document.getElementById("step2").classList.add("hidden");
       document.getElementById("step3").classList.remove("hidden");
     }
 
-    // Step 3: Final message and submit to Google Form
     function finalMessage(answer) {
-      answerValue = answer;
-
-      // Google Form POST endpoint
-      const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSdDEoGfM4ksj1dE4C0eYp1ZRwmJzH6tO9ND54zC52QigCtekw/formResponse";
-
-      // Build FormData with the 3 fields
-      const formData = new FormData();
-      formData.append("entry.373337828", nicknameValue);   // Nickname
-      formData.append("entry.661368496", giftValue);       // Valentine gift
-      formData.append("entry.1990425933", answerValue);    // What they give you
-
-      // Submit without redirect
-      fetch(formURL, { method: "POST", body: formData, mode: "no-cors" });
-
-      // Show final screen
       document.getElementById("step3").classList.add("hidden");
       const final = document.getElementById("final");
       const text = document.getElementById("finalText");
