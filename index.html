@@ -57,6 +57,14 @@
       animation: pop 0.8s ease;
     }
 
+    .share-btn {
+      background: #ff4d6d;
+      color: white;
+      font-size: 20px;
+      margin-top: 15px;
+      padding: 12px 30px;
+    }
+
     /* Dancing bear */
     .bear {
       font-size: 80px;
@@ -98,7 +106,7 @@
 
   <!-- STEP 0: Nickname -->
   <div id="step0">
-    <h1>Enter your nickname 📝</h1>
+    <h1>Choose a nickname</h1>
     <input type="text" id="nickname" placeholder="Your nickname" />
     <button id="startBtn">Start ❤️</button>
   </div>
@@ -130,23 +138,23 @@
     <button class="option-btn" onclick="finalMessage('All of the above 💖')">All of the above 💖</button>
   </div>
 
-  <!-- FINAL -->
+  <!-- FINAL SHARE SCREEN -->
   <div id="final" class="hidden">
     <h1 class="final" id="finalText"></h1>
     <div class="bear">🐻‍❄️💃</div>
+    <button class="share-btn" id="shareBtn">Share your answer with me ❤️</button>
   </div>
 
   <script>
     const startBtn = document.getElementById("startBtn");
     const yesBtn = document.getElementById("yes");
     const noBtn = document.getElementById("no");
+    const shareBtn = document.getElementById("shareBtn");
 
     let nicknameValue = "";
     let giftValue = "";
     let answerValue = "";
     let size = 18;
-
-    const webAppURL = "https://script.google.com/macros/s/AKfycbzGUeC9dceEDSseVuduDihW7okB6halJGQADUhm4ZCWK3F9v3SyKLM6A04QbcR6HTkH/exec";
 
     // Falling hearts function
     function createHearts() {
@@ -192,32 +200,27 @@
       document.getElementById("step3").classList.remove("hidden");
     }
 
-    // Step 3: Final message and submit to Google Apps Script
+    // Step 3: Final message and show Share button
     function finalMessage(answer) {
       answerValue = answer;
 
-      // Send POST request to Web App
-      fetch(webAppURL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          nickname: nicknameValue,
-          gift: giftValue,
-          answer: answerValue
-        })
-      }).catch((err) => console.log("Submission error:", err));
-
-      // Show final screen
       document.getElementById("step3").classList.add("hidden");
       const final = document.getElementById("final");
       const text = document.getElementById("finalText");
 
       createHearts();
 
-      text.innerHTML = `Haha 🥹 You chose <br><br> <strong>${answer}</strong> <br><br> It's going to be fun! ❤️`;
+      text.innerHTML = `Haha 🥹 You chose <br><br> <strong>${answer}</strong> <br>and want <strong>${giftValue}</strong> <br><br> It's going to be fun! ❤️`;
 
       final.classList.remove("hidden");
     }
+
+    // Share button: lets user send their answers directly to you
+    shareBtn.addEventListener("click", () => {
+      const message = `Hey! ${nicknameValue} wants ${giftValue} for Valentine and will give ${answerValue}! 💖`;
+      const whatsappURL = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+      window.open(whatsappURL, "_blank");
+    });
   </script>
 
 </body>
